@@ -1,15 +1,18 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProvider";
+import { MdShoppingCartCheckout } from "react-icons/md";
+import useCart from "../../../Hooks/useCart";
 
 
 const Navbar = () => {
+    const [cart] = useCart()
 
-    const {user,logOut} = useContext(AuthContext);
+    const { user, logOut } = useContext(AuthContext);
     const handleLogout = () => {
         logOut()
-        .then(result => console.log(result))
-        .catch(error => console.log(error))
+            .then(result => console.log(result))
+            .catch(error => console.log(error))
     }
 
     const navOptions = <>
@@ -17,11 +20,17 @@ const Navbar = () => {
         <li> <NavLink to="/menu">Menu</NavLink> </li>
         <li> <NavLink to="/order/salad">Order</NavLink> </li>
         <li> <NavLink to="/secret">secret</NavLink> </li>
-        
+        <li>
+            <Link to="/dashboard/cart"><button className="btn bg-opacity-40">
+            <MdShoppingCartCheckout size={30} color="white" />
+                <div className="badge badge-secondary">{cart.length}</div>
+            </button></Link>
+        </li>
+
         {
             user ? <><button onClick={handleLogout} className="btn btn-ghost">Logout</button></> : <><li> <NavLink to="/login">Login</NavLink> </li></>
         }
-       
+
     </>
     return (
         <div>
@@ -50,9 +59,9 @@ const Navbar = () => {
                     </div>
                     <a className="btn btn-ghost text-xl">Rahat Restaurant</a>
                 </div>
-                <div className="navbar-center hidden lg:flex">
-                    <ul className="menu menu-horizontal px-1">
-                       {navOptions}
+                <div className="navbar-center hidden lg:flex justify-center items-center">
+                    <ul className="menu menu-horizontal px-1 flex items-center justify-center">
+                        {navOptions}
                     </ul>
                 </div>
                 <div className="navbar-end">

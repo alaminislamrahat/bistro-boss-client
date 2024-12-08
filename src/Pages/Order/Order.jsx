@@ -18,6 +18,7 @@ const Order = () => {
     // Define the state for the selected tab index
     const [tabIndex, setTabIndex] = useState(initialIndex);
     const [menu] = useMenu();
+    console.log(tabIndex)
     
     const dessert = menu.filter(item => item.category === 'dessert');
     const soup = menu.filter(item => item.category === 'soup');

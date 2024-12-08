@@ -10,6 +10,10 @@ import slide4 from '../../../assets/home/slide4.jpg'
 import slide5 from '../../../assets/home/slide5.jpg'
 import SectionTitle from '../../../Components/SectionTitle/SectionTitle';
 const Category = () => {
+const handlehumayn = ()=>{
+    
+}
+    
     return (
         <div>
             <SectionTitle subHeading={"From 11.00am to 10.00pm"} heading={"Order Online"}/>
