@@ -4,11 +4,13 @@ import { useForm } from 'react-hook-form';
 import { AuthContext } from '../../Providers/AuthProvider';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import useAxiosPublic from '../../Hooks/useAxiosPublic';
 
 const SignUp = () => {
     const {createUser,updateUserProfile} = useContext(AuthContext);
     const { register, handleSubmit, watch,reset, formState: { errors } } = useForm();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic()
     const onSubmit = data => {
         console.log(data);
         createUser(data.email,data.password)
@@ -17,16 +19,29 @@ const SignUp = () => {
             console.log(user)
             updateUserProfile(data.name,data.photo)
             .then(()=>{
-                console.log(('user updated'));
-                reset();
-                Swal.fire({
-                   
-                    icon: "success",
-                    title: "user created",
-                    showConfirmButton: false,
-                    timer: 1500
-                  });
-                  navigate('/')
+
+                // create user antry in database
+                const userInfo = {
+                    name : data.name,
+                    email : data.email
+                }
+                axiosPublic.post('/users',userInfo)
+                .then(res => {
+                    if(res.data.insertedId){
+                        reset();
+                        Swal.fire({
+                           
+                            icon: "success",
+                            title: "user created",
+                            showConfirmButton: false,
+                            timer: 1500
+                          });
+                          navigate('/')
+                          console.log(('user updated to database'));
+                    }
+                })
+              
+              
 
             })
             .catch(err => console.log(err))
