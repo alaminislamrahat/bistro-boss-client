@@ -3,8 +3,9 @@ import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { AuthContext } from '../../Providers/AuthProvider';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useAxiosPublic from '../../Hooks/useAxiosPublic';
+import SocialLogin from '../../Components/SocialLogin/SocialLogin';
 
 const SignUp = () => {
     const {createUser,updateUserProfile} = useContext(AuthContext);
@@ -109,6 +110,8 @@ const SignUp = () => {
 
                             </div>
                         </form>
+                        <p className='px-8'><small>New here <Link to="/login">Create a account</Link></small></p>
+                        <SocialLogin/>
                     </div>
                 </div>
             </div>
