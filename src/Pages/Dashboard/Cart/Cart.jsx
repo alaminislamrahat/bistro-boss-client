@@ -3,9 +3,10 @@ import useCart from '../../../Hooks/useCart';
 import { FaTrashAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
-    const [cart,refetch] = useCart();
+    const [cart, refetch] = useCart();
     const totalPrice = cart.reduce((total, item) => total + item.price, 0);
     const axiosSecure = useAxiosSecure()
 
@@ -19,24 +20,24 @@ const Cart = () => {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
-           
+
 
                 axiosSecure.delete(`/cart/${id}`)
-                .then(res => {
-                    console.log(res.data)
-                    if(res.data.deletedCount > 0){
-                        refetch();
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: "Your file has been deleted.",
-                            icon: "success"
-                          });
-                    }
-                })
+                    .then(res => {
+                        console.log(res.data)
+                        if (res.data.deletedCount > 0) {
+                            refetch();
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                        }
+                    })
             }
-          });
+        });
 
 
     }
@@ -45,7 +46,13 @@ const Cart = () => {
             <div className='flex justify-evenly mb-8'>
                 <h2 className="text-3xl">Items : {cart.length}</h2>
                 <h2 className="text-3xl">Total Price : {totalPrice}</h2>
-                <button className='btn btn-primary'>Pay</button>
+                {cart.length ? <Link to={`/dashboard/payment`}>
+                    <button
+                        disabled={!cart.length}
+                        className='btn btn-primary'>Pay</button>
+                </Link> : <button
+                    disabled={!cart.length}
+                    className='btn btn-primary'>Pay</button>}
             </div>
 
             <div className="overflow-x-auto">
@@ -89,8 +96,8 @@ const Cart = () => {
                                 </td>
                                 <th>
                                     <button
-                                    onClick={()=>handleDelete(item._id)}
-                                     className="btn btn-error text-white "><FaTrashAlt/></button>
+                                        onClick={() => handleDelete(item._id)}
+                                        className="btn btn-error text-white "><FaTrashAlt /></button>
                                 </th>
                             </tr>)
                         }

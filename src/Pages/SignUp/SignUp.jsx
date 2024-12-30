@@ -8,45 +8,51 @@ import useAxiosPublic from '../../Hooks/useAxiosPublic';
 import SocialLogin from '../../Components/SocialLogin/SocialLogin';
 
 const SignUp = () => {
-    const {createUser,updateUserProfile} = useContext(AuthContext);
-    const { register, handleSubmit, watch,reset, formState: { errors } } = useForm();
+    const { createUser, updateUserProfile } = useContext(AuthContext);
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
     const navigate = useNavigate();
     const axiosPublic = useAxiosPublic()
     const onSubmit = data => {
         console.log(data);
-        createUser(data.email,data.password)
-        .then(result => {
-            const user = result.user
-            console.log(user)
-            updateUserProfile(data.name,data.photo)
-            .then(()=>{
+        createUser(data.email, data.password)
+            .then(result => {
+                const user = result.user
+                console.log(user)
+                updateUserProfile(data.name, data.photo)
+                    .then(() => {
 
-                // create user antry in database
-                const userInfo = {
-                    name : data.name,
-                    email : data.email
-                }
-                axiosPublic.post('/users',userInfo)
-                .then(res => {
-                    if(res.data.insertedId){
-                        reset();
-                        Swal.fire({
-                           
-                            icon: "success",
-                            title: "user created",
-                            showConfirmButton: false,
-                            timer: 1500
-                          });
-                          navigate('/')
-                          console.log(('user updated to database'));
-                    }
-                })
-              
-              
+                        // create user antry in database
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email
+                        }
+                        axiosPublic.post('/users', userInfo)
+                            .then(res => {
+                                if (res.data.insertedId) {
+                                    reset();
+                                    Swal.fire({
 
+                                        icon: "success",
+                                        title: "user created",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                    navigate('/')
+                                    console.log(('user updated to database'));
+                                }
+                            })
+
+
+
+                    })
+                    .catch(err => console.log(err))
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: `${error.message}`,
+                    footer: '<a href="#">Why do I have this issue?</a>'
+                });
             })
-            .catch(err => console.log(err))
-        })
     }
 
     console.log(watch("example"));
@@ -111,7 +117,7 @@ const SignUp = () => {
                             </div>
                         </form>
                         <p className='px-8'><small>New here <Link to="/login">Create a account</Link></small></p>
-                        <SocialLogin/>
+                        <SocialLogin />
                     </div>
                 </div>
             </div>
