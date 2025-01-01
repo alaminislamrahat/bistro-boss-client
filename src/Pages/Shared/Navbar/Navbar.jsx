@@ -3,12 +3,16 @@ import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProvider";
 import { MdShoppingCartCheckout } from "react-icons/md";
 import useCart from "../../../Hooks/useCart";
+import useAdmin from "../../../Hooks/useAdmin";
 
 
 const Navbar = () => {
     const [cart] = useCart()
 
     const { user, logOut } = useContext(AuthContext);
+
+    const [isAdmin] = useAdmin()
+
     const handleLogout = () => {
         logOut()
             .then(result => console.log(result))
@@ -19,7 +23,12 @@ const Navbar = () => {
         <li> <NavLink to="/">Home</NavLink> </li>
         <li> <NavLink to="/menu">Menu</NavLink> </li>
         <li> <NavLink to="/order/salad">Order</NavLink> </li>
-        <li> <NavLink to="/secret">secret</NavLink> </li>
+        {
+            user && isAdmin && <li> <NavLink to="/dashboard/adminHome">dashboard</NavLink> </li>
+        }
+        {
+            user && !isAdmin && <li> <NavLink to="/dashboard/userHome">dashboard</NavLink> </li>
+        }
         <li>
             <Link to="/dashboard/cart"><button className="btn bg-opacity-40">
             <MdShoppingCartCheckout size={30} color="white" />
